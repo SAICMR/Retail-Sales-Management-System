@@ -1,0 +1,84 @@
+.table-container {
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+
+.sales-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.sales-table thead {
+  background: #f8f9fa;
+  position: sticky;
+  top: 0;
+}
+
+.sales-table th {
+  padding: 1rem 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  color: #555;
+  border-bottom: 2px solid #e0e0e0;
+  white-space: nowrap;
+}
+
+.sales-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #f0f0f0;
+  color: #333;
+}
+
+.sales-table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.sales-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.final-amount {
+  font-weight: 600;
+  color: #667eea;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.status-delivered {
+  background: #c8e6c9;
+  color: #2e7d32;
+}
+
+.status-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-cancelled {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.status-processing {
+  background: #cfe2ff;
+  color: #084298;
+}
+
+@media (max-width: 1200px) {
+  .sales-table {
+    font-size: 0.85rem;
+  }
+  
+  .sales-table th,
+  .sales-table td {
+    padding: 0.5rem;
+  }
+}
+
