@@ -54,3 +54,4 @@ Get available filter options for the UI.
 ### GET /api/health
 Health check endpoint.
 
+

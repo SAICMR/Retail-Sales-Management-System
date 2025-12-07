@@ -1,38 +1,35 @@
 import express from 'express';
 import cors from 'cors';
-import salesRoutes from './routes/salesRoutes.js';
-import { loadSalesData } from './utils/dataLoader.js';
+import salesRoutes from '../backend/src/routes/salesRoutes.js';
+import { loadSalesData } from '../backend/src/utils/dataLoader.js';
 
 const app = express();
-const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// Load data on startup
+// Load data on startup (cached for serverless)
 let salesData = [];
-let dataLoading = true;
-let dataLoadError = null;
+let dataLoaded = false;
 
-loadSalesData()
-  .then(data => {
-    salesData = data;
-    dataLoading = false;
-    console.log(`Loaded ${salesData.length} sales records`);
-  })
-  .catch(err => {
-    console.error('Error loading data:', err);
-    dataLoading = false;
-    dataLoadError = err.message;
-    salesData = []; // Fallback to empty array
-  });
+async function ensureDataLoaded() {
+  if (!dataLoaded) {
+    try {
+      salesData = await loadSalesData();
+      dataLoaded = true;
+      console.log(`Loaded ${salesData.length} sales records`);
+    } catch (err) {
+      console.error('Error loading data:', err);
+      salesData = [];
+    }
+  }
+}
 
-// Make data available to routes and ensure data is loaded
-app.use((req, res, next) => {
+// Middleware to ensure data is loaded and make it available to routes
+app.use(async (req, res, next) => {
+  await ensureDataLoaded();
   req.app.locals.salesData = salesData;
-  req.app.locals.dataLoading = dataLoading;
-  req.app.locals.dataLoadError = dataLoadError;
   next();
 });
 
@@ -40,7 +37,8 @@ app.use((req, res, next) => {
 app.use('/api/sales', salesRoutes);
 
 // Health check
-app.get('/api/health', (req, res) => {
+app.get('/api/health', async (req, res) => {
+  await ensureDataLoaded();
   res.json({ status: 'ok', records: salesData.length });
 });
 
@@ -68,8 +66,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
+// Export the Express app as a serverless function
+export default app;
 

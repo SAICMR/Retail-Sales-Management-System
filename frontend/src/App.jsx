@@ -47,9 +47,16 @@ function App() {
   const loadFilterOptions = async () => {
     try {
       const response = await fetchFilterOptions();
-      setFilterOptions(response.data);
+      if (response && response.data) {
+        setFilterOptions(response.data);
+      } else {
+        console.error('Invalid response from filter options API:', response);
+        setFilterOptions({}); // Set empty object to prevent infinite loading
+      }
     } catch (error) {
       console.error('Error loading filter options:', error);
+      console.error('Error details:', error.response?.data || error.message);
+      setFilterOptions({}); // Set empty object to prevent infinite loading
     }
   };
 
@@ -194,4 +201,5 @@ function App() {
 }
 
 export default App;
+
 

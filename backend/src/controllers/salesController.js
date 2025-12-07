@@ -72,6 +72,34 @@ export const getSales = (req, res) => {
 export const getFilterOptions = (req, res) => {
   try {
     const salesData = req.app.locals.salesData || [];
+    const dataLoading = req.app.locals.dataLoading;
+    const dataLoadError = req.app.locals.dataLoadError;
+
+    // If data is still loading, wait a bit and return empty options
+    if (dataLoading) {
+      return res.json({
+        success: true,
+        data: {
+          customerRegion: [],
+          gender: [],
+          ageRange: { min: 0, max: 100 },
+          productCategory: [],
+          tags: [],
+          paymentMethod: [],
+          dateRange: { min: null, max: null }
+        },
+        loading: true
+      });
+    }
+
+    // If there was an error loading data, return error
+    if (dataLoadError) {
+      return res.status(500).json({
+        success: false,
+        error: `Failed to load data: ${dataLoadError}`
+      });
+    }
+
     const salesService = new SalesService(salesData);
     const options = salesService.getFilterOptions(salesData);
 
@@ -80,10 +108,12 @@ export const getFilterOptions = (req, res) => {
       data: options
     });
   } catch (error) {
+    console.error('Error in getFilterOptions:', error);
     res.status(500).json({
       success: false,
       error: error.message
     });
   }
 };
+
 

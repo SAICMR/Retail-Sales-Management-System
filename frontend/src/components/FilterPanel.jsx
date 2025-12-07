@@ -1,8 +1,18 @@
 import '../styles/FilterPanel.css';
 
 function FilterPanel({ filterOptions, filters, onFilterChange, onClearFilters }) {
-  if (!filterOptions) {
+  if (filterOptions === null) {
     return <div className="filter-panel">Loading filter options...</div>;
+  }
+  
+  if (filterOptions && Object.keys(filterOptions).length === 0) {
+    return (
+      <div className="filter-panel">
+        <div style={{ padding: '20px', color: '#d32f2f' }}>
+          Failed to load filter options. Please check if the backend server is running on port 3001.
+        </div>
+      </div>
+    );
   }
 
   const handleMultiSelect = (filterType, value, checked) => {
@@ -183,4 +193,5 @@ function FilterPanel({ filterOptions, filters, onFilterChange, onClearFilters })
 }
 
 export default FilterPanel;
+
 

@@ -89,3 +89,4 @@ The frontend will run on `http://localhost:3000`
 
 The application will automatically generate sample data if no data file is found in `backend/data/sales_data.json`.
 
+

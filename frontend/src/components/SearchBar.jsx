@@ -35,3 +35,4 @@ function SearchBar({ onSearch, value }) {
 
 export default SearchBar;
 
+

@@ -269,3 +269,4 @@ root/
 - WebSocket support for real-time updates
 - Advanced filtering with query builders
 
+
