@@ -27,6 +27,16 @@ async function ensureDataLoaded() {
 }
 
 // Middleware to ensure data is loaded and make it available to routes
+// Quick request logger to help diagnose NOT_FOUND on Vercel deployments
+app.use((req, res, next) => {
+  try {
+    console.log(`[api] ${new Date().toISOString()} ${req.method} ${req.originalUrl}`);
+  } catch (e) {
+    // ignore logging errors
+  }
+  next();
+});
+
 app.use(async (req, res, next) => {
   await ensureDataLoaded();
   req.app.locals.salesData = salesData;
