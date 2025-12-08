@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import salesRoutes from '../backend/src/routes/salesRoutes.js';
-import { loadSalesData } from '../backend/src/utils/dataLoader.js';
+import salesRoutes from './salesRoutes.js';
+import { loadSalesData } from './dataLoader.js';
 
 const app = express();
 
