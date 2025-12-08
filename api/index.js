@@ -33,11 +33,11 @@ app.use(async (req, res, next) => {
   next();
 });
 
-// Routes
-app.use('/api/sales', salesRoutes);
+// Routes (when invoked via Vercel, /api prefix is already stripped by router)
+app.use('/sales', salesRoutes);
 
 // Health check
-app.get('/api/health', async (req, res) => {
+app.get('/health', async (req, res) => {
   await ensureDataLoaded();
   res.json({ status: 'ok', records: salesData.length });
 });
@@ -49,9 +49,9 @@ app.use((req, res) => {
     error: 'NOT_FOUND',
     message: `The requested resource '${req.method} ${req.originalUrl}' could not be found.`,
     availableEndpoints: [
-      'GET /api/sales',
-      'GET /api/sales/filter-options',
-      'GET /api/health'
+      'GET /sales',
+      'GET /sales/filter-options',
+      'GET /health'
     ]
   });
 });
